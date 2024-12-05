@@ -22,6 +22,6 @@ export interface WeatherTimeProps extends BlockAttributes {
 }
 
 export const WeatherTime = ({ message, contentLanguage }: WeatherTimeProps): ReactElement => {
-  return <div>Hello {message} {contentLanguage}</div>;
+  return <div>Hi {message} {contentLanguage}</div>;
 };
 

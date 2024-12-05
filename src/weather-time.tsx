@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-import React, { ReactElement, useState, useEffect } from "react";
+import React, { ReactElement, useState, useEffect, useRef } from "react";
 import { BlockAttributes } from "widget-sdk";
 
 /**
@@ -22,6 +22,7 @@ export interface WeatherTimeProps extends BlockAttributes {
 }
 
 export const WeatherTime = ({ city }: WeatherTimeProps): ReactElement => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [condition, setCondition] = useState<string>("Loading...");
   const [iconUrl, setIconUrl] = useState<string>("");
   const [temperatureC, setTemperatureC] = useState<number | null>(null);
@@ -52,18 +53,25 @@ export const WeatherTime = ({ city }: WeatherTimeProps): ReactElement => {
   const [country, setCountry] = useState<string>("");
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsSmallScreen(window.innerWidth < 800);
-    };
-    window.addEventListener("resize", handleResize);
-
-    // Set initial value
-    handleResize();
-
+    const container = containerRef.current;
+  
+    if (!container) return;
+  
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        const width = entry.contentRect.width;
+        setIsSmallScreen(width < 400);
+      }
+    });
+  
+    observer.observe(container);
+  
+    // Clean up
     return () => {
-      window.removeEventListener("resize", handleResize);
+      observer.unobserve(container);
     };
   }, []);
+  
 
   useEffect(() => {
     if (localTime) {
@@ -201,6 +209,7 @@ export const WeatherTime = ({ city }: WeatherTimeProps): ReactElement => {
 
   return (
     <div
+      ref={containerRef}
       style={{
         display: "flex",
         justifyContent: "space-between",

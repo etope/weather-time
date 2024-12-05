@@ -20,11 +20,12 @@ import { JSONSchema7 } from "json-schema";
  */
 export const configurationSchema: JSONSchema7 = {
   properties: {
-    message: {
-      type: "string",
-      title: "message",
+    city: {
+      type: 'string',
+      title: 'City',
     },
   },
+  required: ['city'],
 };
 
 /**
@@ -32,7 +33,7 @@ export const configurationSchema: JSONSchema7 = {
  * @see https://rjsf-team.github.io/react-jsonschema-form/docs/api-reference/uiSchema
  */
 export const uiSchema: UiSchema = {
-  message: {
-    "ui:help": "Please enter a message to show",
+  city: {
+    'ui:help': 'Enter the city name in order to view weather & time.',
   },
 };
